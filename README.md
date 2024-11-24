@@ -1,36 +1,27 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+TodoApp을 10번 반복해서 만들어 봤습니다.
 
-## Getting Started
 
-First, run the development server:
+이 Repo는 각 회차의 소감을 기술합니다.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 1 회차
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+내가 과연 할 수 있을까? 싶었습니다.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+지금까지 리액트랑 넥스트JS를 어떻게 배웠길래 이런 것 하나 구현 못하나 싶었습니다.
 
-## Learn More
+1회차는 사실상 강사님의 코드를 그대로 읽고 따라치는 수준이었습니다.
 
-To learn more about Next.js, take a look at the following resources:
+## 2 회차
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+분명 1회차를 통해 코드 내용을 전부 이해했다고 생각했으나, 그렇지 않은 것 같습니다. 강사님이 짠 화면을 내가 그대로 똑같이 만드는건 어렵지 않을거라 생각했으나, 디자인이 다르게 나와 당황했습니다.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+hook을 관리 할 때, 강사님은 props drilling을 사용했습니다. 이 것을 customHook이나 zustand로 관리해볼까 했지만, 일단은 props drilling 패턴부터 제대로 사용해보자 결정했습니다.
+추후 다른 프로젝트에서 customHook과 zustand 상태관리 로직을 연습해볼 것입니다.
 
-## Deploy on Vercel
+- 긍정적인 면은, 분명 1회차 할 때보다 훨씬 수월하게 개발했습니다. 처음엔 넘을 수 없는 벽처럼 느껴지지만, 그 감정을 이겨내어 계속 그냥 하다보면 되는 것 같습니다.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+또한 강사님 코드의 경우, todo가 edit 모드일 때, drag n drop이 작동하지 않습니다. 이 부분을 개선했습니다. 강사님의 코드는 항상 완벽한 줄 알았는데,
+아니네요. 역시 한번 구현해보는게 아니라, 여러번 구현해보는게 맞는 것 같습니다.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+3 회차를 들어가야 할 까 고민이 됩니다. 그냥 다음 프로젝트를 들어가보고 싶으나, 10회 복습 해보기로 했으니 한번 해보겠습니다.
