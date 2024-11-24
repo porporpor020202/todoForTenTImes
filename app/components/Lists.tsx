@@ -6,23 +6,22 @@ import {
 } from '@hello-pangea/dnd';
 import { Dispatch, SetStateAction } from 'react';
 
+import { Todo } from '../types/type';
 import List from './List';
-
-import { TodoType } from '@/app/types/todo';
 
 const Lists = ({
   todos,
   setTodos,
 }: {
-  todos: TodoType[];
-  setTodos: Dispatch<SetStateAction<TodoType[]>>;
+  todos: Todo[];
+  setTodos: Dispatch<SetStateAction<Todo[]>>;
 }) => {
   const handleDragEnd = (result: DropResult) => {
-    const { destination, source, draggableId } = result;
+    const { destination, source } = result;
 
     if (!destination) return;
 
-    const newTodos = Array.from(todos);
+    const newTodos = [...todos];
     newTodos.splice(source.index, 1);
     newTodos.splice(destination.index, 0, todos[source.index]);
 
@@ -33,12 +32,8 @@ const Lists = ({
   return (
     <DragDropContext onDragEnd={handleDragEnd}>
       <Droppable droppableId="todos">
-        {(provided, snapshot) => (
-          <div
-            className={`mb-4 mt-3`}
-            {...provided.droppableProps}
-            ref={provided.innerRef}
-          >
+        {(provided) => (
+          <div ref={provided.innerRef} {...provided.droppableProps}>
             {todos.map((todo, index) => (
               <Draggable
                 key={todo.id}
@@ -53,11 +48,11 @@ const Lists = ({
                   >
                     <List
                       key={todo.id}
-                      todos={todos}
-                      setTodos={setTodos}
                       id={todo.id}
                       content={todo.content}
                       completed={todo.completed}
+                      todos={todos}
+                      setTodos={setTodos}
                       snapshot={snapshot}
                     />
                   </div>

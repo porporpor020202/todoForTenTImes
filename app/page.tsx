@@ -1,10 +1,7 @@
 import dynamic from 'next/dynamic';
 
-const TodoApp = dynamic(() => import('./components/TodoApp'), {
+const TodoApp = dynamic(() => import('@/app/components/TodoApp'), {
   ssr: false,
 });
 
-const page = () => {
-  return <TodoApp />;
-};
-export default page;
+export default TodoApp;

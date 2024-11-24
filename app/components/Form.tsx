@@ -1,43 +1,43 @@
 import { Dispatch, SetStateAction, useState } from 'react';
 
-import { TodoType } from '../types/todo';
+import { Todo } from '../types/type';
 
 const Form = ({
+  todos,
   setTodos,
 }: {
-  setTodos: Dispatch<SetStateAction<TodoType[]>>;
+  todos: Todo[];
+  setTodos: Dispatch<SetStateAction<Todo[]>>;
 }) => {
-  const [content, setContent] = useState('');
+  const [value, setValue] = useState('');
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    const newTodo = {
-      id: Date.now(),
-      content,
-      completed: false,
-    };
-    setTodos((prev) => {
-      const newTodos = [...prev, newTodo];
-      localStorage.setItem('todos', JSON.stringify(newTodos));
-      setContent('');
-      return newTodos;
-    });
+  const handleSubmit = (e?: React.FormEvent<HTMLFormElement>) => {
+    if (e) e.preventDefault();
+
+    const newTodos = [
+      ...todos,
+      { id: Date.now(), content: value, completed: false },
+    ];
+
+    setTodos(newTodos);
+    localStorage.setItem('todos', JSON.stringify(newTodos));
+    setValue('');
   };
 
   return (
-    <div className="flex items-center gap-4">
-      <form
-        className="flex-1 rounded border shadow"
-        onSubmit={(e) => handleSubmit(e)}
-      >
+    <div className="flex w-full">
+      <form className="mr-4 flex w-full" onSubmit={handleSubmit}>
         <input
+          type="text"
+          className="flex-1 rounded-md p-3 shadow"
           placeholder="해야 할 일을 입력하세요"
-          className="w-full appearance-none px-3 py-2"
-          value={content}
-          onChange={(e) => setContent(e.target.value)}
+          value={value}
+          onChange={(e) => setValue(e.target.value)}
         />
       </form>
-      <button>입력</button>
+      <button className="mr-4" onClick={() => handleSubmit()}>
+        Add
+      </button>
     </div>
   );
 };

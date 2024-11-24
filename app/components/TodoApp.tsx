@@ -2,43 +2,28 @@
 
 import { useState } from 'react';
 
-import Form from '@/app/components/Form';
-import Lists from '@/app/components/Lists';
-
-const initialTodos = [
-  { id: 1, content: '할 일 1', completed: false },
-  { id: 2, content: '할 일 2', completed: false },
-  { id: 3, content: '할 일 3', completed: true },
-];
+import Form from './Form';
+import Lists from './Lists';
 
 const TodoApp = () => {
   const [todos, setTodos] = useState(() => {
-    const savedTodos = localStorage.getItem('todos');
-
-    if (savedTodos === null || savedTodos === '[]') {
-      localStorage.setItem('todos', JSON.stringify(initialTodos));
-      return initialTodos;
-    } else {
-      return JSON.parse(savedTodos);
-    }
+    return JSON.parse(localStorage.getItem('todos') || '[]');
   });
 
   const handleDeleteAll = () => {
-    const newTodos: [] = [];
-
-    setTodos(newTodos);
-    localStorage.setItem('todos', JSON.stringify(newTodos));
+    setTodos([]);
+    localStorage.removeItem('todos');
   };
 
   return (
     <div className="flex h-screen w-screen items-center justify-center bg-blue-100">
-      <div className="mx-4 w-full max-w-lg rounded bg-white p-6 shadow md:w-3/4">
+      <div className="w-3/4 max-w-lg rounded bg-white p-4 shadow">
         <div className="flex items-center justify-between">
           <div>할 일 목록</div>
           <button onClick={handleDeleteAll}>Delete All</button>
         </div>
         <Lists todos={todos} setTodos={setTodos} />
-        <Form setTodos={setTodos} />
+        <Form todos={todos} setTodos={setTodos} />
       </div>
     </div>
   );
