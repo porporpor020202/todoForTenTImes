@@ -1,88 +1,115 @@
 import { DraggableStateSnapshot } from '@hello-pangea/dnd';
 import { Dispatch, SetStateAction, useState } from 'react';
 
-import { Todo } from '../types/type';
+import { TodoType } from '../types/types';
+import { cn } from '../utils/utils';
 
 const List = ({
+  todos,
+  setTodos,
   id,
   content,
   completed,
-  todos,
-  setTodos,
   snapshot,
-}: Todo & {
-  todos: Todo[];
-  setTodos: Dispatch<SetStateAction<Todo[]>>;
+}: {
+  todos: TodoType[];
+  setTodos: Dispatch<SetStateAction<TodoType[]>>;
+  id: TodoType['id'];
+  content: TodoType['content'];
+  completed: TodoType['completed'];
   snapshot: DraggableStateSnapshot;
 }) => {
-  const [isEditing, setIsEditing] = useState(false);
+  const [isEditting, setIsEditting] = useState(false);
   const [editContent, setEditContent] = useState(content);
 
-  const handleTogle = () => {
-    const newTodos = todos.map((todo: Todo) =>
-      todo.id === id ? { ...todo, completed: !completed } : todo,
-    );
+  const handleEditButton = () => {
+    setIsEditting((prev) => !prev);
 
-    setTodos(newTodos);
-    localStorage.setItem('todos', JSON.stringify(newTodos));
+    const newTodo = todos.map((todo) => {
+      if (todo.id === id) {
+        return { ...todo, content: editContent };
+      }
+      return todo;
+    });
+
+    setTodos(newTodo);
+    localStorage.setItem('todos', JSON.stringify(newTodo));
   };
 
-  const handleEdit = () => {
-    setIsEditing((prev) => !prev);
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    const newTodo = todos.map((todo) => {
+      if (todo.id === id) {
+        return { ...todo, content: editContent };
+      }
+      return todo;
+    });
+
+    setIsEditting((prev) => !prev);
+    setTodos(newTodo);
+    localStorage.setItem('todos', JSON.stringify(newTodo));
   };
 
-  const handleOnSubmit = (e?: React.FormEvent<HTMLFormElement>) => {
-    if (e) e.preventDefault();
+  const handleCompleteTogle = () => {
+    const newTodo = todos.map((todo) => {
+      if (todo.id === id) {
+        return { ...todo, completed: !completed };
+      }
+      return todo;
+    });
 
-    const newTodos = todos.map((todo: Todo) =>
-      todo.id === id ? { ...todo, content: editContent } : todo,
-    );
-    setTodos(newTodos);
-    localStorage.setItem('todos', JSON.stringify(newTodos));
-    setIsEditing((prev) => !prev);
+    setTodos(newTodo);
+    localStorage.setItem('todos', JSON.stringify(newTodo));
   };
 
-  const handleDelete = () => {
-    const newTodos = todos.filter((todo: Todo) => todo.id !== id);
-    setTodos(newTodos);
-    localStorage.setItem('todos', JSON.stringify(newTodos));
+  const handleDeleteButton = () => {
+    const newTodo = todos.filter((todo) => todo.id !== id);
+
+    setTodos(newTodo);
+    localStorage.setItem('todos', JSON.stringify(newTodo));
   };
 
-  return isEditing ? (
-    <div
-      className={`my-2 flex items-center justify-between rounded-md ${
-        snapshot.isDragging ? 'bg-gray-300' : 'bg-gray-100'
-      } text-gray-500`}
-    >
-      <form onSubmit={(e) => handleOnSubmit(e)}>
-        <input
-          type="text"
-          value={editContent}
-          className="my-1 ml-2 rounded-lg p-3"
-          onChange={(e) => setEditContent(e.target.value)}
-        />
-      </form>
-      <div className="mr-6 flex items-center gap-4">
-        <button onClick={() => handleOnSubmit()}>save</button>
-        <button onClick={handleDelete}>Delete</button>
+  return isEditting ? (
+    <div>
+      <div
+        className={cn(
+          'my-2 flex items-center justify-between rounded-lg bg-gray-100 px-4 py-2 shadow',
+          snapshot.isDragging && 'bg-blue-200',
+        )}
+      >
+        <form onSubmit={(e) => handleSubmit(e)} className="h-10 flex-1">
+          <input
+            type="text"
+            value={editContent}
+            onChange={(e) => setEditContent(e.target.value)}
+            className="h-full w-3/4 rounded-md p-2 shadow-sm"
+            autoFocus
+          />
+        </form>
+        <div className="mr-6 flex gap-4">
+          <button onClick={handleEditButton}>save</button>
+          <button>delete</button>
+        </div>
       </div>
     </div>
   ) : (
     <div
-      className={`my-2 flex items-center justify-between rounded-md ${
-        snapshot.isDragging ? 'bg-gray-300' : 'bg-gray-100'
-      } p-4 text-gray-500`}
+      className={cn(
+        'my-2 flex items-center justify-between rounded-lg bg-gray-100 p-4 shadow',
+        snapshot.isDragging && 'bg-blue-200',
+      )}
     >
       <input
         type="checkbox"
         checked={completed}
-        onChange={handleTogle}
         className="mr-2"
+        onChange={handleCompleteTogle}
       />
-      <span className="flex-1">{content}</span>
-      <div className="mr-6 flex items-center gap-4">
-        <button onClick={handleEdit}>Edit</button>
-        <button onClick={handleDelete}>Delete</button>
+      <div className="mr-4 flex-1">{content}</div>
+      <div className="mr-6 flex gap-4">
+        <button onClick={handleEditButton}>edit</button>
+        <button onClick={handleDeleteButton}>delete</button>
       </div>
     </div>
   );

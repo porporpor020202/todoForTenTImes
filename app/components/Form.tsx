@@ -1,43 +1,65 @@
-import { Dispatch, SetStateAction, useState } from 'react';
+import {
+  ChangeEvent,
+  Dispatch,
+  FormEvent,
+  SetStateAction,
+  useState,
+} from 'react';
 
-import { Todo } from '../types/type';
+import { TodoType } from '../types/types';
 
 const Form = ({
   todos,
   setTodos,
 }: {
-  todos: Todo[];
-  setTodos: Dispatch<SetStateAction<Todo[]>>;
+  todos: TodoType[];
+  setTodos: Dispatch<SetStateAction<TodoType[]>>;
 }) => {
-  const [value, setValue] = useState('');
+  const [inputValue, setInputValue] = useState('');
 
-  const handleSubmit = (e?: React.FormEvent<HTMLFormElement>) => {
-    if (e) e.preventDefault();
+  const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setInputValue(e.target.value);
+  };
 
-    const newTodos = [
-      ...todos,
-      { id: Date.now(), content: value, completed: false },
-    ];
+  const handleSubmit = (e?: FormEvent<HTMLFormElement>) => {
+    e?.preventDefault();
 
-    setTodos(newTodos);
-    localStorage.setItem('todos', JSON.stringify(newTodos));
-    setValue('');
+    if (inputValue.trim() === '') {
+      return;
+    }
+
+    const newTodo = {
+      id: Date.now(),
+      content: inputValue,
+      completed: false,
+    };
+
+    setTodos([...todos, newTodo]);
+    setInputValue('');
+
+    localStorage.setItem('todos', JSON.stringify([...todos, newTodo]));
   };
 
   return (
-    <div className="flex w-full">
-      <form className="mr-4 flex w-full" onSubmit={handleSubmit}>
+    <div className="mt-4 flex items-center justify-between">
+      <form className="flex-1" onSubmit={handleSubmit}>
         <input
           type="text"
-          className="flex-1 rounded-md p-3 shadow"
-          placeholder="해야 할 일을 입력하세요"
-          value={value}
-          onChange={(e) => setValue(e.target.value)}
+          placeholder="할 일을 입력하세요"
+          value={inputValue}
+          onChange={handleInputChange}
+          className="w-full rounded-md p-2 shadow-sm"
+          autoFocus
         />
       </form>
-      <button className="mr-4" onClick={() => handleSubmit()}>
-        Add
-      </button>
+      <div className="ml-2 flex items-center justify-center">
+        <button
+          className="rounded-md bg-blue-500 px-4 py-2 text-white"
+          onClick={() => handleSubmit()}
+        >
+          Add
+        </button>
+      </div>
     </div>
   );
 };

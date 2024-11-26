@@ -6,34 +6,32 @@ import {
 } from '@hello-pangea/dnd';
 import { Dispatch, SetStateAction } from 'react';
 
-import { Todo } from '../types/type';
+import { TodoType } from '../types/types';
 import List from './List';
 
 const Lists = ({
   todos,
   setTodos,
 }: {
-  todos: Todo[];
-  setTodos: Dispatch<SetStateAction<Todo[]>>;
+  todos: TodoType[];
+  setTodos: Dispatch<SetStateAction<TodoType[]>>;
 }) => {
   const handleDragEnd = (result: DropResult) => {
-    const { destination, source } = result;
+    if (!result.destination) return;
 
-    if (!destination) return;
+    const items = Array.from(todos);
+    const [reorderedItem] = items.splice(result.source.index, 1);
+    items.splice(result.destination.index, 0, reorderedItem);
 
-    const newTodos = [...todos];
-    newTodos.splice(source.index, 1);
-    newTodos.splice(destination.index, 0, todos[source.index]);
-
-    setTodos(newTodos);
-    localStorage.setItem('todos', JSON.stringify(newTodos));
+    setTodos(items);
+    localStorage.setItem('todos', JSON.stringify(items));
   };
 
   return (
     <DragDropContext onDragEnd={handleDragEnd}>
       <Droppable droppableId="todos">
         {(provided) => (
-          <div ref={provided.innerRef} {...provided.droppableProps}>
+          <div {...provided.droppableProps} ref={provided.innerRef}>
             {todos.map((todo, index) => (
               <Draggable
                 key={todo.id}
@@ -47,12 +45,11 @@ const Lists = ({
                     {...provided.dragHandleProps}
                   >
                     <List
-                      key={todo.id}
+                      todos={todos}
+                      setTodos={setTodos}
                       id={todo.id}
                       content={todo.content}
                       completed={todo.completed}
-                      todos={todos}
-                      setTodos={setTodos}
                       snapshot={snapshot}
                     />
                   </div>
@@ -66,4 +63,5 @@ const Lists = ({
     </DragDropContext>
   );
 };
+
 export default Lists;
