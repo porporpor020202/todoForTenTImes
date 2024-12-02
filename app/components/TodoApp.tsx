@@ -2,9 +2,9 @@
 
 import { useState } from 'react';
 
-import { TodoType } from '../types/types';
-import Form from './Form';
-import Lists from './Lists';
+import Form from '@/app/components/Form';
+import Lists from '@/app/components/Lists';
+import { TodoType } from '@/app/types/types';
 
 const initialTodos = [
   { id: 1, content: '리액트 공부하기', completed: false },

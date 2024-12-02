@@ -6,8 +6,8 @@ import {
 } from '@hello-pangea/dnd';
 import { Dispatch, SetStateAction } from 'react';
 
-import { TodoType } from '../types/types';
-import List from './List';
+import List from '@/app/components/List';
+import { TodoType } from '@/app/types/types';
 
 const Lists = ({
   todos,
@@ -45,12 +45,13 @@ const Lists = ({
                     {...provided.dragHandleProps}
                   >
                     <List
-                      todos={todos}
-                      setTodos={setTodos}
+                      todo={todo}
                       id={todo.id}
-                      content={todo.content}
+                      title={todo.content}
                       completed={todo.completed}
+                      todos={todos}
                       snapshot={snapshot}
+                      setTodos={setTodos}
                     />
                   </div>
                 )}

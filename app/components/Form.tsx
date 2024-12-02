@@ -1,12 +1,7 @@
-import {
-  ChangeEvent,
-  Dispatch,
-  FormEvent,
-  SetStateAction,
-  useState,
-} from 'react';
+import { Dispatch, SetStateAction, useState } from 'react';
 
-import { TodoType } from '../types/types';
+import { TodoType } from '@/app/types/types';
+import { cn } from '@/app/utils/utils';
 
 const Form = ({
   todos,
@@ -15,51 +10,42 @@ const Form = ({
   todos: TodoType[];
   setTodos: Dispatch<SetStateAction<TodoType[]>>;
 }) => {
-  const [inputValue, setInputValue] = useState('');
+  const [title, setTitle] = useState('');
 
-  const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setInputValue(e.target.value);
-  };
-
-  const handleSubmit = (e?: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = (e?: React.FormEvent<HTMLFormElement>) => {
     e?.preventDefault();
-
-    if (inputValue.trim() === '') {
-      return;
-    }
 
     const newTodo = {
       id: Date.now(),
-      content: inputValue,
+      content: title,
       completed: false,
     };
 
     setTodos([...todos, newTodo]);
-    setInputValue('');
-
+    setTitle('');
     localStorage.setItem('todos', JSON.stringify([...todos, newTodo]));
   };
 
   return (
-    <div className="mt-4 flex items-center justify-between">
-      <form className="flex-1" onSubmit={handleSubmit}>
+    <div className="mt-4 flex items-center justify-between gap-4">
+      <form
+        className="flex-1 items-center gap-4"
+        onSubmit={(e) => handleSubmit(e)}
+      >
         <input
           type="text"
-          placeholder="할 일을 입력하세요"
-          value={inputValue}
-          onChange={handleInputChange}
-          className="w-full rounded-md p-2 shadow-sm"
-          autoFocus
+          placeholder="Add a new todo"
+          className="w-full rounded-md p-2 shadow"
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
         />
       </form>
-      <div className="ml-2 flex items-center justify-center">
-        <button
-          className="rounded-md bg-blue-500 px-4 py-2 text-white"
-          onClick={() => handleSubmit()}
-        >
-          Add
-        </button>
-      </div>
+      <button
+        onClick={() => handleSubmit()}
+        className="flex items-center justify-center"
+      >
+        <p>Add</p>
+      </button>
     </div>
   );
 };
