@@ -52,6 +52,16 @@ const List = ({
     localStorage.setItem('todos', JSON.stringify(newTodos));
   };
 
+  const formatDate = (timestamp: number) => {
+    const date = new Date(timestamp);
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    const hours = String(date.getHours()).padStart(2, '0');
+    const minutes = String(date.getMinutes()).padStart(2, '0');
+    const seconds = String(date.getSeconds()).padStart(2, '0');
+    return `${month}월 ${day}일 ${hours}:${minutes}:${seconds}`;
+  };
+
   return (
     <>
       {isEditing ? (
@@ -81,7 +91,7 @@ const List = ({
       ) : (
         <div
           className={cn(
-            'mt-2 flex justify-between rounded-lg bg-gray-100 p-4 text-gray-400',
+            'mt-2 flex items-center justify-between rounded-lg bg-gray-100 p-4 text-gray-400',
             snapshot.isDragging && 'bg-blue-500',
           )}
         >
@@ -92,9 +102,14 @@ const List = ({
             onClick={handleCompleted}
           />
           <p className="flex-1">{title}</p>
-          <div className="bg-r mr-8 flex gap-4">
-            <button onClick={handleEdit}>Edit</button>
-            <button onClick={handleDelete}>Delete</button>
+          <div className="mr-8 w-2/5 flex-row">
+            <div className="flex gap-4">
+              <button onClick={handleEdit}>Edit</button>
+              <button onClick={handleDelete}>Delete</button>
+            </div>
+            <div className="flex">
+              <p>날짜 : {formatDate(id)}</p>
+            </div>
           </div>
         </div>
       )}

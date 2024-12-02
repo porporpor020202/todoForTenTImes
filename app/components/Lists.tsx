@@ -12,9 +12,11 @@ import { TodoType } from '@/app/types/types';
 const Lists = ({
   todos,
   setTodos,
+  isDndDisabled,
 }: {
   todos: TodoType[];
   setTodos: Dispatch<SetStateAction<TodoType[]>>;
+  isDndDisabled: boolean;
 }) => {
   const handleDragEnd = (result: DropResult) => {
     if (!result.destination) return;
@@ -29,7 +31,7 @@ const Lists = ({
 
   return (
     <DragDropContext onDragEnd={handleDragEnd}>
-      <Droppable droppableId="todos">
+      <Droppable droppableId="todos" isDropDisabled={isDndDisabled}>
         {(provided) => (
           <div {...provided.droppableProps} ref={provided.innerRef}>
             {todos.map((todo, index) => (
@@ -37,6 +39,7 @@ const Lists = ({
                 key={todo.id}
                 draggableId={todo.id.toString()}
                 index={index}
+                isDragDisabled={isDndDisabled}
               >
                 {(provided, snapshot) => (
                   <div

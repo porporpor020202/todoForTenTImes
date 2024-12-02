@@ -1,7 +1,6 @@
 import { Dispatch, SetStateAction, useState } from 'react';
 
 import { TodoType } from '@/app/types/types';
-import { cn } from '@/app/utils/utils';
 
 const Form = ({
   todos,
